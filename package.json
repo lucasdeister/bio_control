@@ -1,0 +1,7 @@
+{
+  "name": "academy",
+  "version": "1.0.0",
+  "dependencies": {
+    "cpf-cnpj-validator": "^1.0.3"
+  }
+}
