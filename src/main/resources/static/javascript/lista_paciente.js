@@ -1,4 +1,51 @@
 var modal = document.getElementById("myModal");
+var modal2 = document.getElementById("myModalEdicao");
+
+
+
+function atualizarAcaoFormulario() {
+    var idPaciente = document.getElementById("id_paciente").value;
+    var form = document.getElementById("formEditarPacientes");
+    form.action = "/alterar/" + idPaciente;
+    form.submit();
+}
+
+function exibirModalEdicao(id) {
+
+    document.querySelector('#id_paciente').value = id;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/alterar/' + id);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var paciente = JSON.parse(xhr.responseText);
+            preencherCamposEdicao(paciente);
+            modal2.style.display = "block";
+        } else {
+            console.error('Erro na requisição. Status: ' + xhr.status);
+        }
+    };
+    xhr.send();
+}
+
+const preencherCamposEdicao = (paciente) =>{
+    document.getElementById('nome_edicao').value = paciente.nome;
+    document.getElementById('cpf_edicao').value = paciente.cpf;
+    document.getElementById('idade_edicao').value = paciente.idade;
+    document.getElementById('email_edicao').value = paciente.email;
+    document.getElementById('telefone_edicao').value = paciente.telefone;
+
+    if (paciente.sexo === 'm') {
+        document.getElementById('masculino_edicao').checked = true;
+    } else if (paciente.sexo === 'f') {
+        document.getElementById('feminino_edicao').checked = true;
+    }
+}
+
+function fecharModalEdicao() {
+    modal2.style.display = "none";
+}
+
 
 function exibirModalCriacao() {
     limparCamposForm();
@@ -58,20 +105,29 @@ const limparCampoIdade = () =>{
 
 let campo_cpf =  document.querySelector('#cpf').value;
 
-const validarPreenchimentoCamposForm = () =>{
+const validarPreenchimentoCamposForm = (i) =>{
 
     event.preventDefault();
-    const nome =  document.querySelector('#nome').value.length;
-    const idade =  document.querySelector('#idade').value.length;
-    const email =  document.querySelector('#email').value.length;
-    const telefone =  document.querySelector('#telefone').value.length;
 
-    if(nome > 0 && (verificarCPF(campo_cpf)) && idade > 0 && email > 0 && telefone > 0){
-        return true;
-    }else{
-        alert('Todos os campos devem ser preenchidos corretamente');
-        return false;
+    const nome =  document.querySelectorAll('.campo_nome')[i].value.length;
+    const idade =  document.querySelectorAll('.campo_idade')[i].value;
+    const email =  document.querySelectorAll('.campo_email')[i].value.length;
+    const telefone =  document.querySelectorAll('.campo_telefone')[i].value.length;
+
+    if(i==1) {//edicao
+        if (nome > 0 && idade > 0 && email > 0 && telefone > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
+        else{
+            if (nome > 0 && (verificarCPF(campo_cpf)) && idade > 0 && email > 0 && telefone > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 }
 
 function validarCPF(cpf) {
@@ -109,6 +165,7 @@ function validarCPF(cpf) {
 
 function verificarCPF() {
     var cpf = document.getElementById('cpf').value;
+
     var valido = validarCPF(cpf);
     if (valido) {
         return true;
@@ -135,66 +192,108 @@ function verificarExistenciaCPF() {
                 jaExiste = false;
             }
         } else {
-            alert('Erro na requisição AJAX');
+            exibirToast("Erro", "Erro na requisição AJAX", "red");
         }
     };
     xhr.send();
     return jaExiste;
 }
 
-document.getElementById('cadastrar_paciente').addEventListener('click', function() {
 
-    let campos_preenchidos = validarPreenchimentoCamposForm();
+
+document.getElementById('editar_paciente').addEventListener('click', function() {
+    let campos_preenchidos = validarPreenchimentoCamposForm(1);
+
+    if (campos_preenchidos) {
+        exibirToast('Sucesso!', 'Paciente editado com sucesso', 'green');
+        fecharModalEdicao();
+        setTimeout(function() {
+            atualizarAcaoFormulario();
+        }, 1000);
+    } else {
+        exibirToast("Erro", "Favor preencher todos os dados corretamente", "red");
+    }
+});
+
+
+document.getElementById('cadastrar_paciente').addEventListener('click', function() {
+    let campos_preenchidos = validarPreenchimentoCamposForm(0);
 
     const cpfJaExiste = verificarExistenciaCPF();
 
-    if(cpfJaExiste){
-        alert("O CPF informado já existe na base de dados")
-    }else{
-        if(campos_preenchidos){
-            var toastSucesso = document.getElementById('toastSucesso');
-            var toast = document.createElement('div');
-            toast.classList.add('toast');
-            toast.setAttribute('role', 'status');
-            toast.setAttribute('aria-live', 'polite');
-            toast.setAttribute('aria-atomic', 'true');
-
-            var toastHeader = document.createElement('div');
-            toastHeader.classList.add('toast-header');
-
-            var strong = document.createElement('strong');
-            strong.classList.add('me-auto');
-            strong.style.color = 'green';
-            strong.textContent = 'Sucesso!';
-
-            var toastBody = document.createElement('div');
-            toastBody.classList.add('toast-body');
-            toastBody.textContent = 'Paciente cadastrado com sucesso';
-
-            toastHeader.appendChild(strong);
-
-            toast.appendChild(toastHeader);
-            toast.appendChild(toastBody);
-
-            toastSucesso.appendChild(toast);
-
-            var toastInstance = new bootstrap.Toast(toast);
-            toastInstance.show();
-            setTimeout(function () {
-                toastInstance.hide();
-                setTimeout(function () {
-                    toast.remove();
-                    document.getElementById('formCadastrarPacientes').submit();
-                    fecharModalCriacao();
-                }, 500);
-            }, 1500);
-        }
-        else{
-            alert('Favor preencher todos os dados corretamente');
+    if (cpfJaExiste) {
+        exibirToast("Erro", "O CPF informado já existe na base de dados", "red");
+    } else {
+        if (campos_preenchidos) {
+            exibirToast('Sucesso!', 'Paciente cadastrado com sucesso', 'green');
+            fecharModalCriacao();
+            setTimeout(function() {
+                document.getElementById('formCadastrarPacientes').submit();
+            }, 1000);
+        } else {
+            exibirToast("Erro", "Favor preencher todos os dados corretamente", "red");
         }
     }
 });
 
 
-//implementar renderização dinâmica dos elementos em js da listagem de pacientes
-//fazer o update, delete e findall de pacientes
+
+const exibirToast = (titulo, texto, color) => {
+    var toast_principal = document.createElement('div');
+    toast_principal.id = 'toast_principal';
+    toast_principal.setAttribute('aria-live', 'polite');
+    toast_principal.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(toast_principal);
+
+    var toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
+
+    var toastHeader = document.createElement('div');
+    toastHeader.classList.add('toast-header');
+
+    var strong = document.createElement('strong');
+    strong.classList.add('me-auto');
+    strong.style.color = color;
+    strong.textContent = titulo;
+
+    var toastBody = document.createElement('div');
+    toastBody.classList.add('toast-body');
+    toastBody.textContent = texto;
+
+    toastHeader.appendChild(strong);
+
+    toast.appendChild(toastHeader);
+    toast.appendChild(toastBody);
+
+    toast_principal.appendChild(toast);
+
+    var toastInstance = new bootstrap.Toast(toast);
+    toastInstance.show();
+    setTimeout(function () {
+        toastInstance.hide();
+        setTimeout(function () {
+            toast.remove();
+        }, 500);
+    }, 1500);
+};
+
+
+function excluirPaciente(id){
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/excluir/' + id);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            exibirToast('Sucesso!', 'Paciente excluído com sucesso', 'green');
+            setTimeout(function () {
+                location.reload();
+            }, 1500);
+        } else {
+            console.error('Erro na requisição. Status: ' + xhr.status);
+        }
+    };
+    xhr.send();
+}

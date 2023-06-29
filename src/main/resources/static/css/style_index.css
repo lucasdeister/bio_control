@@ -1,63 +1,5 @@
-*{
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Lucida Sans';
-}
-
-.grid-container {
-	display: grid;
-	grid-template-areas:
-	'header header header header header header'
-	'main main main main main'
-	'footer footer footer footer footer footer';
-  }
-
-  .cabecalho{
-	display: flex;
-	justify-content: center;
-	box-shadow: 0px 30px 20px -30px rgba(0,0,0,0.63);
-	padding: 10px;
-}
-
-.titulo{
-	font-size: 30px;
-}
-
-.container-rodape{
-	font-size: 17px;
-    padding: 2px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content:center;
-    align-items: center;
-    color: black;
-}
-
-.icones{
-	margin-left: 5px;
-	color: black;
-}
-
-.insta{
-	font-size: 25px;
-}
-
-.email{
-	font-size: 30px;
-}
-
-.grid-container{
-	background: linear-gradient(to left, #eae9d5, #0059a7d6);
-}
-
 .conteudo{
-	display: flex;
-	justify-content: center;
 	align-items: center;
-	height: 93.2vh;
 }
 
 .tela_login{
@@ -75,5 +17,5 @@ a{
 }
 
 #btnSair{
-	display: none;
+	visibility: hidden;
 }
