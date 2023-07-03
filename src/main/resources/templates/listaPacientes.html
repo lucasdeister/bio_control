@@ -20,9 +20,13 @@
             <form class="formModal" id="formCadastrarPacientes" th:action="@{/inserirPacientes}" method="post" th:object="${paciente}">
                 <span class="close" onclick="fecharModalCriacao()">&times;</span>
                 <h3 class="tituloModal mb-5">Cadastrar paciente</h3>
+                <label for="nome">Nome:</label>
                 <input class="form-control mb-4 campo_nome" id="nome" placeholder="Nome" type="text" th:field="*{nome}">
+                <label for="cpf">CPF:</label>
                 <input class="form-control mb-4" id="cpf" placeholder="CPF" type="text" onchange="inserirMascaraCpf(this.value)" th:field="*{cpf}">
+                <label for="idade">Idade:</label>
                 <input class="form-control mb-4 campo_idade" id="idade" placeholder="Idade" type="number" th:field="*{idade}">
+                <label>Sexo:</label>
                 <div class="form-check-inline mb-4">
                     <input class="form-check-input" type="radio" name="sexo" id="masculino" value="m" th:field="*{sexo}">
                     <label class="form-check-label" for="masculino">Masculino</label>
@@ -30,8 +34,10 @@
                 <div class="form-check-inline">
                     <input class="form-check-input" type="radio" name="sexo" id="feminino" value="f">
                     <label class="form-check-label" for="feminino">Feminino</label>
-                </div>
+                </div><br>
+                <label for="email">Email:</label>
                 <input class="form-control mb-4 campo_email" id="email" placeholder="Email" type="email" th:field="*{email}">
+                <label for="telefone">Telefone:</label>
                 <input class="form-control mb-4 campo_telefone" id="telefone" placeholder="Telefone" type="text" th:field="*{telefone}">
                 <button type="submit" id="cadastrar_paciente" name="cadastrar" class="btn btn-outline-success w-50">Cadastrar</button>
             </form>
@@ -42,19 +48,25 @@
                 <form class="formModal" id="formEditarPacientes" action="/alterar" method="post" th:object="${paciente}">
                 <span class="close" onclick="fecharModalEdicao()">&times;</span>
                 <h3 class="tituloModal mb-5">Editar paciente</h3>
-                    <input type="hidden" id="id_paciente" name="id" th:value="*{id}">
+                <input type="hidden" id="id_paciente" name="id" th:value="*{id}">
+                <label for="nome_edicao">Nome:</label>
                 <input class="form-control mb-4 campo_nome" id="nome_edicao" placeholder="Nome" type="text" th:field="*{nome}">
+                <label for="cpf_edicao">CPF:</label>
                 <input class="form-control mb-4" id="cpf_edicao" placeholder="CPF" type="text" th:field="*{cpf}" readonly>
+                <label for="idade_edicao">Idade:</label>
                 <input class="form-control mb-4 campo_idade" id="idade_edicao" placeholder="Idade" type="number" th:field="*{idade}">
+                <label>Sexo:</label>
                 <div class="form-check-inline mb-4">
                     <input class="form-check-input" type="radio" name="sexo" id="masculino_edicao" value="m" th:field="*{sexo}" th:value="m">
-                    <label class="form-check-label" for="masculino">Masculino</label>
+                    <label class="form-check-label" for="masculino_edicao">Masculino</label>
                 </div>
                 <div class="form-check-inline">
                     <input class="form-check-input" type="radio" name="sexo" id="feminino_edicao" value="f" th:value="f">
-                    <label class="form-check-label" for="feminino">Feminino</label>
-                </div>
+                    <label class="form-check-label" for="feminino_edicao">Feminino</label>
+                </div><br>
+                <label for="email_edicao">E-mail:</label>
                 <input class="form-control mb-4 campo_email" id="email_edicao" placeholder="Email" type="email" th:field="*{email}">
+                <label for="telefone_edicao">Telefone:</label>
                 <input class="form-control mb-4 campo_telefone" id="telefone_edicao" placeholder="Telefone" type="text" th:field="*{telefone}">
                 <button type="submit" id="editar_paciente" name="editar" class="btn btn-outline-success w-50">Gravar</button>
             </form>
@@ -67,11 +79,11 @@
                 <hr class="mt-4">
                 <div class="container-fluid">
                     <a id="btnCadastrarPaciente" class="btn btn-outline-success me-3 mb-3 text-dark" onclick="exibirModalCriacao()">Cadastrar paciente</a>
-                    <a id="btnGerenciarVacinas" class="btn btn-outline-info me-3 mb-3 text-dark" onclick="asd()">Gerenciar vacinas</a>
+                    <a id="btnGerenciarVacinas" class="btn btn-outline-info me-3 mb-3 text-dark" th:href="@{/listaVacinas.html}">Gerenciar vacinas</a>
                 </div>
                 <div class="input-group campo_pesquisa mt-2 w-25 text-center">
-                    <input type="search" id="form1" class="form-control" placeholder="Pesquisar..."/>
-                    <label class="form-label" for="form1"></label>
+                    <input type="search" id="btn_search" class="form-control" placeholder="Pesquisar..."/>
+                    <label class="form-label" for="btn_search"></label>
                    <button type="button" class="btn btn-primary"><i class='bx bx-search-alt-2' ></i></button>
                 </div>
                 <table class="table table-bordered table-striped table-hover table-borderless align-middle mt-2">
@@ -83,7 +95,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                        <tr scope="row" th:each="pacientes : ${pacienteList}">
+                        <tr th:each="pacientes : ${pacienteList}">
                             <td th:text="${pacientes.nome}"></td>
                             <td th:text="${pacientes.cpf}"></td>
                             <td>
@@ -109,5 +121,6 @@
     <div th:insert="~{fragmentos/frag :: rodape}"></div>
 </div>
 </body>
+<script type="text/javascript" src="/javascript/toast.js"></script>
 <script type="text/javascript" src="/javascript/lista_paciente.js"></script>
 </html>

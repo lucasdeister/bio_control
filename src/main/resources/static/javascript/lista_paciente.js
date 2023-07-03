@@ -1,8 +1,6 @@
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModalEdicao");
 
-
-
 function atualizarAcaoFormulario() {
     var idPaciente = document.getElementById("id_paciente").value;
     var form = document.getElementById("formEditarPacientes");
@@ -69,7 +67,7 @@ const inserirMascaraCpf = (v) =>{
 
 function filtrarTabela() {
 
-    var filtro = document.getElementById("form1").value.toUpperCase();
+    var filtro = document.getElementById("btn_search").value.toUpperCase();
 
     var linhas = document.getElementsByTagName("tr");
 
@@ -78,8 +76,8 @@ function filtrarTabela() {
         var colunaCPF = linhas[i].getElementsByTagName("td")[1];
 
         if (colunaNome || colunaCPF) {
-            var textoNome = colunaNome.textContent || colunaNome.innerText;
-            var textoCPF = colunaCPF.textContent || colunaCPF.innerText;
+            var textoNome = colunaNome.innerText;
+            var textoCPF = colunaCPF.innerText;
 
             if (textoNome.toUpperCase().indexOf(filtro) > -1 || textoCPF.toUpperCase().indexOf(filtro) > -1) {
                 linhas[i].style.display = "";
@@ -91,6 +89,7 @@ function filtrarTabela() {
 }
 
 var botaoPesquisar = document.querySelector(".campo_pesquisa button");
+
 botaoPesquisar.addEventListener("click", filtrarTabela);
 
 
@@ -235,51 +234,6 @@ document.getElementById('cadastrar_paciente').addEventListener('click', function
         }
     }
 });
-
-
-
-const exibirToast = (titulo, texto, color) => {
-    var toast_principal = document.createElement('div');
-    toast_principal.id = 'toast_principal';
-    toast_principal.setAttribute('aria-live', 'polite');
-    toast_principal.setAttribute('aria-atomic', 'true');
-    document.body.appendChild(toast_principal);
-
-    var toast = document.createElement('div');
-    toast.classList.add('toast');
-    toast.setAttribute('role', 'status');
-    toast.setAttribute('aria-live', 'polite');
-    toast.setAttribute('aria-atomic', 'true');
-
-    var toastHeader = document.createElement('div');
-    toastHeader.classList.add('toast-header');
-
-    var strong = document.createElement('strong');
-    strong.classList.add('me-auto');
-    strong.style.color = color;
-    strong.textContent = titulo;
-
-    var toastBody = document.createElement('div');
-    toastBody.classList.add('toast-body');
-    toastBody.textContent = texto;
-
-    toastHeader.appendChild(strong);
-
-    toast.appendChild(toastHeader);
-    toast.appendChild(toastBody);
-
-    toast_principal.appendChild(toast);
-
-    var toastInstance = new bootstrap.Toast(toast);
-    toastInstance.show();
-    setTimeout(function () {
-        toastInstance.hide();
-        setTimeout(function () {
-            toast.remove();
-        }, 500);
-    }, 1500);
-};
-
 
 function excluirPaciente(id){
 

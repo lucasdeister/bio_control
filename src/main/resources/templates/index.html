@@ -20,8 +20,10 @@
 			<div class="container_login">
 				<form class="tela_login">
                     <h3 class="tituloLogin mb-5 text-center">Login</h3>
-					<label for="campo_nome"></label><input type="text" class="form-control mb-4 fs-5" id="campo_nome" placeholder="Nome">
-					<label for="campo_senha"></label><input type="password" class="form-control mb-4 fs-5" id="campo_senha" placeholder="Senha">
+					<label for="campo_nome"></label>
+					<input type="text" class="form-control mb-4 fs-5" id="campo_nome" placeholder="Nome">
+					<label for="campo_senha"></label>
+					<input type="password" class="form-control mb-4 fs-5" id="campo_senha" placeholder="Senha">
 					<a class="btn btn-outline-primary w-100 mt-3" onclick="login()">Entrar</a>
 					<p class="mt-5 text-center">
 						<label>Não tem uma conta?</label>
@@ -33,5 +35,6 @@
 		<div th:insert="~{fragmentos/frag :: rodape}"></div>
 	</div>
 </body>
+<script type="text/javascript" src="/javascript/toast.js"></script>
 <script type="text/javascript" src="/javascript/index.js"></script>
 </html>

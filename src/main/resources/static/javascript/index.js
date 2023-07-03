@@ -12,7 +12,7 @@ function login() {
             if (response.success) {
                 window.location.href = "/listaPacientes.html";
             } else {
-                alert("Login inválido. Por favor, tente novamente.");
+                exibirToast("Erro", "Login inválido. Por favor, tente novamente", "red");
             }
         }
     };
