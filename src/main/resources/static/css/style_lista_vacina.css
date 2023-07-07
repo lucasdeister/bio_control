@@ -94,9 +94,15 @@ th, td{
     margin-right: 50px;
 }
 
-#cadastrar_vacina, #editar_vacina{
+#cadastrar_vacina, #visualizar_vacina, #editar_qtd_vacina{
     margin-left: 25%;
 }
 
 
-
+.formModal_qtd{
+    width: 800px;
+    height: 450px;
+    border-radius: 2%;
+    background-color: white;
+    padding: 10px 40px;
+}

@@ -1,5 +1,41 @@
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModalEdicao");
+var modal3 = document.getElementById("myModalGerenciarQtd");
+
+function fecharModalGerenciarQtd() {
+    modal3.style.display = "none";
+}
+
+function exibirModalGerenciarQtd(id) {
+
+    modal3.style.display = "block";
+    document.querySelector('#incrementar').checked = true;
+
+    document.querySelector('#id_vacina_qtd').value = id;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/gerenciarQtdVacina/' + id);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var vacina = JSON.parse(xhr.responseText);
+            document.getElementById('doses_qtd_gerenciar').value = vacina.qtd;
+        } else {
+            console.error('Erro na requisição. Status: ' + xhr.status);
+        }
+    };
+    xhr.send();
+}
+
+function escolherRadioIncrementar(){
+    document.querySelector('#lbl_qtd').innerText = 'Quantidade a ser incrementada:';
+}
+
+
+function escolherRadioDecrementar(){
+    document.querySelector('#lbl_qtd').innerText = 'Quantidade a ser decrementada:';
+}
+
+
 
 function fecharModalEdicao() {
     modal2.style.display = "none";
@@ -156,8 +192,32 @@ const validarPreenchimentoCamposForm = () =>{
     const doses_necessarias =  document.querySelector('#doses_necessarias').value;
     const doses_disponiveis =  document.querySelector('#dosesDisponiveis').value;
 
-    if (nome > 0 && tipo > 0 && dias_proxima_dose > -1 && doses_necessarias > 0 && doses_disponiveis > 0) {
+    if (nome > 0 && tipo > 0 && dias_proxima_dose > -1 && doses_necessarias > 0 && doses_disponiveis > -1) {
+        if(dias_proxima_dose == 0 && doses_necessarias!= 1){
+            document.querySelector('#doses_necessarias').value = 1;
+            alert("Atenção. Como a recorrência foi cadastrada como dose única, o número de doses necessárias foi definido como 1");
+        }
         return true;
+    } else {
+        return false;
+    }
+}
+
+const validarGravacaoTelaGerenciar = () => {
+    const doses_disponiveis = document.querySelector('#doses_qtd_gerenciar').value;
+    const radio_decrementar = document.querySelector('#decrementar').checked;
+    const qtd_doses = document.querySelector('#qtd_alteracao').value;
+
+    if (qtd_doses > 0) {
+        if (radio_decrementar) {
+            if (doses_disponiveis < qtd_doses) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
     } else {
         return false;
     }
@@ -165,6 +225,18 @@ const validarPreenchimentoCamposForm = () =>{
 
 
 
+document.getElementById('formGerenciarQtd').addEventListener('submit', function(event) {
 
+    event.preventDefault();
 
-
+    let validouAlteracaoQtd = validarGravacaoTelaGerenciar();
+    if (validouAlteracaoQtd) {
+        fecharModalGerenciarQtd();
+        exibirToast('Sucesso!', 'Quantidade de vacina alterada com sucesso', 'green');
+        setTimeout(function() {
+            document.getElementById('formGerenciarQtd').submit();
+        }, 1000);
+    } else {
+        exibirToast("Erro", "Favor preencher todos os dados corretamente", "red");
+    }
+});

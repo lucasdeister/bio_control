@@ -11,8 +11,9 @@ public class AcademyApplication {
 }
 
 
-//criar modal para incremento e decremento da vacina
-//criar rotina para atualização baseado nesta alteração de quantidade
+//Na tela de aplicar vacina só serão carregadas vacinas que tiverem o número de doses superior a 0
+//Na hr de aplicar a vacina eu só carrego as vacinas que ele não terminou de se imunizar, ou que ainda nem tomou.
+//Ou seja se tiver uma vacina que eram necessárias 3 doses e ele já tomou as 3 doses, então está vacina não será carregada para a seleção
 //verificar como criar a tabela de associação entre paciente e vacina
 //criar modal para a aplicação da vacina
 //possibilitar a emissão de comprovante da vacina tomada

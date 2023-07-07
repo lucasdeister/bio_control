@@ -46,6 +46,28 @@ public class VacinaController {
         return "listaVacinas";
     }
 
+    @GetMapping("/gerenciarQtdVacina/{id}")
+    @ResponseBody
+    public ResponseEntity<String> gerenciarQtdVacinaGet(@PathVariable("id") Long id, Model model) {
+        try {
+            Vacina vacina = vacinaRepository.getReferenceById(id);
+            model.addAttribute("vacina", vacina);
+            if (vacina != null) {
+                ObjectMapper objectMapper = new ObjectMapper();
+                objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+
+                String vacinaJson = objectMapper.writeValueAsString(vacina);
+
+                return ResponseEntity.ok(vacinaJson);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
     @GetMapping("/alterarVacina/{id}")
     @ResponseBody
     public ResponseEntity<String> alterarVacinaGet(@PathVariable("id") Long id, Model model) {
@@ -74,4 +96,24 @@ public class VacinaController {
         RedirectView redirectView = new RedirectView("/listaVacinas.html");
         return redirectView;
     }
+
+    @PostMapping("/alterarQtd")
+    public RedirectView alterarQuantidadeVacina(@ModelAttribute("vacina") Vacina vacina, @RequestParam("qtd_alteracao") int quantidadeAlteracao, @RequestParam("opcao") String opcao) {
+        Vacina vacinaAtualizada = vacinaRepository.findById(vacina.getId()).orElse(null);
+        if (vacinaAtualizada != null) {
+            int quantidadeAtual = vacinaAtualizada.getQtd();
+
+            if ("inc".equals(opcao)) {
+                vacinaAtualizada.setQtd(quantidadeAtual + quantidadeAlteracao);
+            } else if ("dec".equals(opcao)) {
+                vacinaAtualizada.setQtd(quantidadeAtual - quantidadeAlteracao);
+            }
+
+            vacinaRepository.save(vacinaAtualizada);
+        }
+
+        RedirectView redirectView = new RedirectView("/listaVacinas.html");
+        return redirectView;
+    }
+
 }

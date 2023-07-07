@@ -37,7 +37,7 @@
   </section>
   <section id="myModalEdicao" class="modal">
     <div class="container_form">
-      <form class="formModal" id="formEditarPacientes" action="/alterar" method="post" th:object="${vacina}">
+      <form class="formModal" th:object="${vacina}">
         <span class="close" onclick="fecharModalEdicao()">&times;</span>
         <h3 class="tituloModal mb-5">Visualizar vacina</h3>
         <input type="hidden" id="id_vacina" name="id" th:value="*{id}">
@@ -51,7 +51,30 @@
         <input class="form-control mb-4" id="doses_min_edicao" type="number" th:field="*{doses_necessarias}" readonly>
         <label for="doses_qtd">Doses disponíveis:</label>
         <input class="form-control mb-4" id="doses_qtd" type="number" th:field="*{qtd}" readonly>
-        <button type="button" id="editar_vacina" name="editar" onclick="fecharModalEdicao()" class="btn btn-outline-success w-50">Fechar</button>
+        <button type="button" id="visualizar_vacina" onclick="fecharModalEdicao()" class="btn btn-outline-success w-50">Fechar</button>
+      </form>
+    </div>
+  </section>
+  <section id="myModalGerenciarQtd" class="modal">
+    <div class="container_form">
+      <form class="formModal_qtd" id="formGerenciarQtd" action="/alterarQtd" method="post" th:object="${vacina}">
+        <span class="close" onclick="fecharModalGerenciarQtd()">&times;</span>
+        <h3 class="tituloModal mb-5">Gerenciar quantidade</h3>
+        <input type="hidden" id="id_vacina_qtd" name="id" th:value="*{id}">
+        <label for="doses_qtd_gerenciar">Doses disponíveis:</label>
+        <input class="form-control mb-4" id="doses_qtd_gerenciar" type="number" th:field="*{qtd}" readonly>
+        <label>Opção:</label>
+        <div class="form-check-inline mb-4">
+          <input class="form-check-input" type="radio" name="opcao" id="incrementar" value="inc" onclick="escolherRadioIncrementar()">
+          <label class="form-check-label" for="incrementar">Incrementar</label>
+        </div>
+        <div class="form-check-inline">
+          <input class="form-check-input" type="radio" name="opcao" id="decrementar" value="dec" onclick="escolherRadioDecrementar()">
+          <label class="form-check-label" for="decrementar">Decrementar</label>
+        </div><br>
+        <label for="qtd_alteracao" id="lbl_qtd">Quantidade a ser incrementada:</label>
+        <input class="form-control mb-4" id="qtd_alteracao" type="number" placeholder="Qtd doses" name="qtd_alteracao">
+        <button type="submit" id="editar_qtd_vacina" name="editar" class="btn btn-outline-success w-50">Salvar</button>
       </form>
     </div>
   </section>
@@ -82,7 +105,7 @@
             <td th:text="${vacinas.nome}"></td>
             <td th:text="${vacinas.tipo}"></td>
             <td>
-              <a th:href="@{aplicarVacina/{id}(id=${vacina.id})}" class="btn btn-outline-success btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Incrementar/Decrementar vacina">
+              <a th:onclick="|exibirModalGerenciarQtd('${vacinas.id}')|" class="btn btn-outline-success btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerenciar quantidade">
                 <i class="fa-solid fa-plus-minus"></i>
               </a>
               <a th:onclick="|exibirModalEdicao('${vacinas.id}')|"  class="btn btn-outline-primary btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Visualizar">

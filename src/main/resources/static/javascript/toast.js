@@ -32,6 +32,7 @@ const exibirToast = (titulo, texto, color) => {
 
     var toastInstance = new bootstrap.Toast(toast);
     toastInstance.show();
+
     setTimeout(function () {
         toastInstance.hide();
         setTimeout(function () {
