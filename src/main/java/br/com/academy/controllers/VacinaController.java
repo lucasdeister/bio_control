@@ -40,7 +40,6 @@ public class VacinaController {
 
     @GetMapping("/listaVacinas.html")
     public String exibirPaginaVacinas(Model model) {
-
         model.addAttribute("vacina", new Vacina());
         model.addAttribute("vacinaList", vacinaRepository.findAll());
         return "listaVacinas";

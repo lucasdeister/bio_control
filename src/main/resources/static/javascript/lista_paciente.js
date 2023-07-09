@@ -1,11 +1,41 @@
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModalEdicao");
+var modal3 = document.getElementById("myModalAplicarVacina");
 
 function atualizarAcaoFormulario() {
     var idPaciente = document.getElementById("id_paciente").value;
     var form = document.getElementById("formEditarPacientes");
     form.action = "/alterar/" + idPaciente;
     form.submit();
+}
+
+function exibirModalAplicarVacina(id){
+    modal3.style.display = "block";
+    var diaAtual = obterDataAtual();
+    document.querySelector('#data_aplicacao').value = diaAtual;
+
+    document.querySelector('#id_paciente').value = id;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', '/alterar/' + id);
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            var paciente = JSON.parse(xhr.responseText);
+            document.getElementById('nome_aplicar_vacina').value = paciente.nome;
+        } else {
+            console.error('Erro na requisição. Status: ' + xhr.status);
+        }
+    };
+    xhr.send();
+
+
+
+
+
+}
+
+function fecharModalAplicarVacina(){
+    modal3.style.display = "none";
 }
 
 function exibirModalEdicao(id) {
@@ -251,3 +281,53 @@ function excluirPaciente(id){
     };
     xhr.send();
 }
+
+$(function() {
+    $("#data_prox_dose").datepicker($.datepicker.regional["pt-BR"]);
+});
+
+
+function obterDataAtual() {
+    var dataAtual = new Date();
+    var dia = dataAtual.getDate();
+    if(dia < 10){
+        dia = '0' + dia;
+    }
+    var mes = dataAtual.getMonth() + 1;
+    if(mes < 10){
+        mes = '0' + mes;
+    }
+    var ano = dataAtual.getFullYear();
+    var dataFormatada = dia + '/' + mes + '/' + ano;
+    return dataFormatada;
+}
+
+function validarDataProximaDose(dataProximaDose) {
+    var dataAtual = new Date();
+
+    var data_aplicacao = document.querySelector('#data_aplicacao').value;
+    var data_prox = document.querySelector('#data_prox_dose').value;
+
+    var dataProximaParts = dataProximaDose.split('/');
+    var diaProxima = parseInt(dataProximaParts[0], 10);
+    var mesProxima = parseInt(dataProximaParts[1], 10) - 1; // Os meses em JavaScript são indexados de 0 a 11
+    var anoProxima = parseInt(dataProximaParts[2], 10);
+
+    var dataProxima = new Date(anoProxima, mesProxima, diaProxima);
+
+    if (dataProxima < dataAtual || data_aplicacao === data_prox) {
+        exibirToast("Atenção", "A próxima dose deve ser maior do que a data atual", "red");
+        document.querySelector('#data_prox_dose').value = '';
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

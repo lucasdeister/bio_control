@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="/javascript/datepicker-pt-br.js"></script>
 </head>
 <body>
 <div class="grid-container">
@@ -72,6 +77,31 @@
             </form>
         </div>
     </section>
+    <section id="myModalAplicarVacina" class="modal">
+        <div class="container_form">
+            <form class="formModal" id="formAplicarVacina" action="/alterar" method="post" th:object="${paciente}">
+                <span class="close" onclick="fecharModalAplicarVacina()">&times;</span>
+                <h3 class="tituloModal mb-5">Aplicar vacina</h3>
+                <input type="hidden" id="id_paciente_aplicar_vacina" name="id" th:value="*{id}">
+                <label for="nome_aplicar_vacina">Nome:</label>
+                <input class="form-control mb-4 campo_nome" id="nome_aplicar_vacina" type="text" th:field="*{nome}" readonly>
+                <label for="vacina">Vacina:</label>
+                <select class="form-select mb-4" aria-label="Selecione a vacina" id="vacina">
+                    <option selected>Selecione a vacina</option>
+                    <option th:each="vacina : ${vacinaList}" th:value="${vacina.id}" th:text="${vacina.nome}"></option>
+                </select>
+                <label for="doses_aplicadas">Doses aplicadas:</label>
+                <input class="form-control mb-4" id="doses_aplicadas" type="number" readonly>
+                <label for="doses_restantes">Doses restantes:</label>
+                <input class="form-control mb-4" id="doses_restantes" type="number" readonly>
+                <label for="data_aplicacao">Data da aplicação:</label>
+                <input type="text" id="data_aplicacao" class="form-control mb-4" value="" readonly>
+                <label for="data_prox_dose">Data da próxima dose:</label>
+                <input type="text" id="data_prox_dose" class="form-control mb-4" onchange="validarDataProximaDose(this.value)" readonly>
+                <button type="submit" id="vacinar_paciente" name="vacinar" class="btn btn-outline-success w-50">Vacinar</button>
+            </form>
+        </div>
+    </section>
    <main class="conteudo">
         <div class="container_principal">
             <form class="tela_pacientes">
@@ -99,7 +129,7 @@
                             <td th:text="${pacientes.nome}"></td>
                             <td th:text="${pacientes.cpf}"></td>
                             <td>
-                                <a th:href="@{aplicarVacina/{id}(id=${paciente.id})}" class="btn btn-outline-success btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicar vacina">
+                                <a th:onclick="|exibirModalAplicarVacina('${pacientes.id}')|" class="btn btn-outline-success btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicar vacina">
                                     <i class='bx bx-injection'></i>
                                 </a>
                                 <a th:href="@{gerarRelatorio/{id}(id=${paciente.id})}" class="btn btn-outline-primary btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar relatório">

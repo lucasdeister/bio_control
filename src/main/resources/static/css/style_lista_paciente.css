@@ -94,7 +94,11 @@ th, td{
     margin-right: 50px;
 }
 
-#cadastrar_paciente, #editar_paciente{
+#cadastrar_paciente, #editar_paciente, #vacinar_paciente{
     margin-left: 25%;
 }
 
+
+#ui-datepicker-div{
+    width: 20%;
+}
