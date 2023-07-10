@@ -3,6 +3,7 @@ package br.com.academy.controllers;
 
 import br.com.academy.model.Paciente;
 import br.com.academy.repository.PacienteRepository;
+import br.com.academy.repository.VacinaRepository;
 import br.com.academy.service.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,11 @@ public class PacienteController {
 
     @Autowired
     private PacienteRepository pacienteRepository;
+    private VacinaRepository vacinaRepository;
     private final PacienteService pacienteService;
 
-    public PacienteController(PacienteService pacienteService) {
+    public PacienteController(VacinaRepository vacinaRepository, PacienteService pacienteService) {
+        this.vacinaRepository = vacinaRepository;
         this.pacienteService = pacienteService;
     }
 
@@ -56,6 +59,7 @@ public class PacienteController {
     public String exibirPaginaPacientes(Model model) {
         model.addAttribute("paciente", new Paciente());
         model.addAttribute("pacienteList", pacienteRepository.findAll());
+        model.addAttribute("vacinaList", vacinaRepository.findAll());
         return "listaPacientes";
     }
 

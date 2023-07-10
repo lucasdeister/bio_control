@@ -28,13 +28,10 @@ function exibirModalAplicarVacina(id){
     };
     xhr.send();
 
-
-
-
-
 }
 
 function fecharModalAplicarVacina(){
+    limparCamposFormAplicarVacina();
     modal3.style.display = "none";
 }
 
@@ -310,7 +307,7 @@ function validarDataProximaDose(dataProximaDose) {
 
     var dataProximaParts = dataProximaDose.split('/');
     var diaProxima = parseInt(dataProximaParts[0], 10);
-    var mesProxima = parseInt(dataProximaParts[1], 10) - 1; // Os meses em JavaScript são indexados de 0 a 11
+    var mesProxima = parseInt(dataProximaParts[1], 10) - 1;
     var anoProxima = parseInt(dataProximaParts[2], 10);
 
     var dataProxima = new Date(anoProxima, mesProxima, diaProxima);
@@ -321,13 +318,99 @@ function validarDataProximaDose(dataProximaDose) {
     }
 }
 
+function limparCamposFormAplicarVacina(){
+    document.querySelector('#nome_aplicar_vacina').value = '';
+    document.querySelector('#doses_aplicadas').value = '';
+    document.querySelector('#doses_restantes').value = '';
+    document.querySelector('#data_prox_dose').value = '';
+    document.getElementById('vacina').selectedIndex = 0;
+}
 
 
 
+document.querySelector('#vacina').addEventListener("change", function() {
 
+    preencherDadosFormulario();
 
+});
+function preencherDadosFormulario() {
 
+    var idPaciente = document.getElementById('id_paciente').value;
+    var idVacina = document.getElementById('vacina').value;
 
+    fetch('/buscarDadosPacienteVacina?idPaciente=' + idPaciente + '&idVacina=' + idVacina)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Erro na requisição da tabela paciente_vacina: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(function(text) {
+            if (text.length > 0) {
+                var data = JSON.parse(text);
+                document.getElementById('doses_aplicadas').value = data.dosesAplicadas;
+                fetch('/buscarDadosVacina?idVacina=' + idVacina)
+                    .then(function(response) {
+                        if (!response.ok) {
+                            throw new Error('Erro na requisição da tabela paciente_vacina: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(function(vacinaData) {
+                        // Preencher o campo doses_restantes com o valor adequado
+                        var dosesNecessarias = vacinaData.doses_necessarias;
+                        var dosesAplicadas = document.getElementById('doses_aplicadas').value;
+                        var dosesRestantes = dosesNecessarias - dosesAplicadas;
+                        document.getElementById('doses_restantes').value = dosesRestantes;
 
+                        if (dosesRestantes === 1 || dosesRestantes === 0)
+                            document.getElementById('data_prox_dose').value = '';
+                        else{
+                            var recorrencia = vacinaData.recorrencia;
+                            var dataAtual = new Date();
+                            var recorrenciaEmDias = recorrencia;
+                            var dataProximaDose = new Date(dataAtual.getTime() + recorrenciaEmDias * 24 * 60 * 60 * 1000);
+                            var dataProximaDoseFormatada = formatDate(dataProximaDose);
+                            document.getElementById('data_prox_dose').value = dataProximaDoseFormatada;
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('Erro na requisição da tabela vacina: ' + error);
+                    });
+            } else {
+                // Não há associação correspondente, preencher os campos do formulário com valores padrão
+                document.getElementById('doses_aplicadas').value = 0;
 
+                fetch('/buscarDadosVacina?idVacina=' + idVacina)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(vacinaData) {
+                        var dosesNecessarias = vacinaData.doses_necessarias;
+                        document.getElementById('doses_restantes').value = dosesNecessarias;
+                        if(dosesNecessarias == 1 || dosesNecessarias == 0){
+                            document.getElementById('data_prox_dose').value = '';
+                        }else{
+                            var recorrencia = vacinaData.recorrencia;
+                            var dataProximaDose = new Date();
+                            dataProximaDose.setDate(dataProximaDose.getDate() + recorrencia);
+                            document.getElementById('data_prox_dose').value = formatDate(dataProximaDose);
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log('Erro na requisição da tabela vacina: ' + error);
+                    });
+            }
+        })
+        .catch(function(error) {
+            console.log('Erro na requisição da tabela paciente_vacina: ' + error);
+        });
+}
+//o submit que deve gravar 01/01/1989 na data de próxima dose caso não haja data de próxima dose
+function formatDate(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    return ('0' + day).slice(-2) + '/' + ('0' + month).slice(-2) + '/' + year;
+}
 

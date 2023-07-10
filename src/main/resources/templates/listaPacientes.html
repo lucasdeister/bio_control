@@ -79,7 +79,7 @@
     </section>
     <section id="myModalAplicarVacina" class="modal">
         <div class="container_form">
-            <form class="formModal" id="formAplicarVacina" action="/alterar" method="post" th:object="${paciente}">
+            <form class="formModal" id="formAplicarVacina" th:action="@{/inserirAssociacao}" th:object="${paciente}">
                 <span class="close" onclick="fecharModalAplicarVacina()">&times;</span>
                 <h3 class="tituloModal mb-5">Aplicar vacina</h3>
                 <input type="hidden" id="id_paciente_aplicar_vacina" name="id" th:value="*{id}">
@@ -92,7 +92,7 @@
                 </select>
                 <label for="doses_aplicadas">Doses aplicadas:</label>
                 <input class="form-control mb-4" id="doses_aplicadas" type="number" readonly>
-                <label for="doses_restantes">Doses restantes:</label>
+                <label for="doses_restantes">Doses necessárias:</label>
                 <input class="form-control mb-4" id="doses_restantes" type="number" readonly>
                 <label for="data_aplicacao">Data da aplicação:</label>
                 <input type="text" id="data_aplicacao" class="form-control mb-4" value="" readonly>

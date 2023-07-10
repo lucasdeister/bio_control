@@ -1,5 +1,6 @@
 package br.com.academy.controllers;
 
+import br.com.academy.model.Paciente;
 import br.com.academy.model.Vacina;
 import br.com.academy.repository.VacinaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
