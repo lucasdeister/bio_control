@@ -10,11 +10,14 @@ function atualizarAcaoFormulario() {
 }
 
 function exibirModalAplicarVacina(id){
+
     modal3.style.display = "block";
+
     var diaAtual = obterDataAtual();
-    document.querySelector('#data_aplicacao').value = diaAtual;
+    document.querySelector('#data_ultima_dose').value = diaAtual;
 
     document.querySelector('#id_paciente').value = id;
+    document.querySelector('#id_paciente_aplicar_vacina').value = id;
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', '/alterar/' + id);
@@ -302,7 +305,7 @@ function obterDataAtual() {
 function validarDataProximaDose(dataProximaDose) {
     var dataAtual = new Date();
 
-    var data_aplicacao = document.querySelector('#data_aplicacao').value;
+    var data_aplicacao = document.querySelector('#data_ultima_dose').value;
     var data_prox = document.querySelector('#data_prox_dose').value;
 
     var dataProximaParts = dataProximaDose.split('/');
@@ -348,7 +351,7 @@ function preencherDadosFormulario() {
         .then(function(text) {
             if (text.length > 0) {
                 var data = JSON.parse(text);
-                document.getElementById('doses_aplicadas').value = data.dosesAplicadas;
+                document.getElementById('doses_aplicadas').value = data.doses_aplicadas;
                 fetch('/buscarDadosVacina?idVacina=' + idVacina)
                     .then(function(response) {
                         if (!response.ok) {
@@ -406,11 +409,71 @@ function preencherDadosFormulario() {
             console.log('Erro na requisição da tabela paciente_vacina: ' + error);
         });
 }
-//o submit que deve gravar 01/01/1989 na data de próxima dose caso não haja data de próxima dose
 function formatDate(date) {
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();
     return ('0' + day).slice(-2) + '/' + ('0' + month).slice(-2) + '/' + year;
 }
+
+
+
+function verificarDosesDisponiveis(idVacina) {
+    return fetch('/buscarDadosVacina?idVacina=' + idVacina)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('Erro na requisição: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(function(vacina) {
+            if (vacina.qtd > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+
+const validarSubmissaoFormAplicarVacina = async () => {
+    const doses_necessarias = document.querySelector('#doses_restantes').value;
+    const idVacina = document.getElementById('vacina').value;
+
+    try {
+        const dosesDisponiveis = await verificarDosesDisponiveis(idVacina);
+
+        if (dosesDisponiveis && doses_necessarias > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+document.querySelector('#vacinar_paciente').addEventListener("click", function() {
+
+    event.preventDefault();
+
+    validarSubmissaoFormAplicarVacina().then(async function (validouSubmissao) {
+        if (validouSubmissao) {
+            exibirToast("Sucesso", "Paciente vacinado com sucesso!", "green");
+            setTimeout(function() {
+                var form_aplicar_vacina = document.getElementById("formAplicarVacina");
+                form_aplicar_vacina.submit();
+            }, 1500);
+        } else {
+            exibirToast("Erro", "O paciente já foi imunizado ou o número de doses desta vacina está zerado", "red");
+        }
+    });
+});
+
+
+
+
 

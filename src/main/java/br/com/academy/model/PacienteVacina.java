@@ -12,21 +12,29 @@ public class PacienteVacina {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "id_paciente")
+    @JoinColumn(name = "id_paciente_aplicar_vacina")
     private Paciente paciente;
 
     @ManyToOne
     @JoinColumn(name = "id_vacina")
     private Vacina vacina;
 
+    public int getDoses_aplicadas() {
+        return doses_aplicadas;
+    }
+
+    public void setDoses_aplicadas(int doses_aplicadas) {
+        this.doses_aplicadas = doses_aplicadas;
+    }
+
     @Column(name = "doses_aplicadas")
-    private int dosesAplicadas;
+    private int doses_aplicadas;
 
     @Column(name = "data_ultima_dose")
-    private LocalDate dataUltimaDose;
+    private LocalDate data_ultima_dose;
 
     @Column(name = "data_prox_dose")
-    private LocalDate dataProximaDose;
+    private LocalDate data_prox_dose;
 
     public Long getId() {
         return id;
@@ -52,27 +60,17 @@ public class PacienteVacina {
         this.vacina = vacina;
     }
 
-    public int getDosesAplicadas() {
-        return dosesAplicadas;
+    public LocalDate getData_prox_dose() {
+        return data_prox_dose;
     }
 
-    public void setDosesAplicadas(int dosesAplicadas) {
-        this.dosesAplicadas = dosesAplicadas;
+    public void setData_prox_dose(LocalDate data_prox_dose) {
+        this.data_prox_dose = data_prox_dose;
     }
 
-    public LocalDate getDataUltimaDose() {
-        return dataUltimaDose;
-    }
+    public LocalDate getData_ultima_dose() {return data_ultima_dose;}
 
-    public void setDataUltimaDose(LocalDate dataUltimaDose) {
-        this.dataUltimaDose = dataUltimaDose;
-    }
-
-    public LocalDate getDataProximaDose() {
-        return dataProximaDose;
-    }
-
-    public void setDataProximaDose(LocalDate dataProximaDose) {
-        this.dataProximaDose = dataProximaDose;
-    }
+    public void setData_ultima_dose(LocalDate data_ultima_dose) {this.data_ultima_dose = data_ultima_dose;}
 }
+
+

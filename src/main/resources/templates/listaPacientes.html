@@ -79,25 +79,25 @@
     </section>
     <section id="myModalAplicarVacina" class="modal">
         <div class="container_form">
-            <form class="formModal" id="formAplicarVacina" th:action="@{/inserirAssociacao}" th:object="${paciente}">
+            <form class="formModal" id="formAplicarVacina" th:action="@{/inserirAssociacao}" method="post">
                 <span class="close" onclick="fecharModalAplicarVacina()">&times;</span>
                 <h3 class="tituloModal mb-5">Aplicar vacina</h3>
-                <input type="hidden" id="id_paciente_aplicar_vacina" name="id" th:value="*{id}">
+                <input type="hidden" id="id_paciente_aplicar_vacina" name="id_paciente_aplicar_vacina">
                 <label for="nome_aplicar_vacina">Nome:</label>
-                <input class="form-control mb-4 campo_nome" id="nome_aplicar_vacina" type="text" th:field="*{nome}" readonly>
+                <input class="form-control mb-4 campo_nome" id="nome_aplicar_vacina" type="text" readonly>
                 <label for="vacina">Vacina:</label>
-                <select class="form-select mb-4" aria-label="Selecione a vacina" id="vacina">
+                <select class="form-select mb-4" aria-label="Selecione a vacina" id="vacina" name="vacina">
                     <option selected>Selecione a vacina</option>
                     <option th:each="vacina : ${vacinaList}" th:value="${vacina.id}" th:text="${vacina.nome}"></option>
                 </select>
                 <label for="doses_aplicadas">Doses aplicadas:</label>
-                <input class="form-control mb-4" id="doses_aplicadas" type="number" readonly>
+                <input class="form-control mb-4" name="doses_aplicadas" id="doses_aplicadas" type="number" readonly>
                 <label for="doses_restantes">Doses necessárias:</label>
-                <input class="form-control mb-4" id="doses_restantes" type="number" readonly>
-                <label for="data_aplicacao">Data da aplicação:</label>
-                <input type="text" id="data_aplicacao" class="form-control mb-4" value="" readonly>
+                <input class="form-control mb-4" id="doses_restantes" name="doses_restantes" type="number" readonly>
+                <label for="data_ultima_dose">Data da aplicação:</label>
+                <input type="text" id="data_ultima_dose" name="data_ultima_dose" class="form-control mb-4" value="" readonly>
                 <label for="data_prox_dose">Data da próxima dose:</label>
-                <input type="text" id="data_prox_dose" class="form-control mb-4" onchange="validarDataProximaDose(this.value)" readonly>
+                <input type="text" id="data_prox_dose" name="data_prox_dose" class="form-control mb-4" onchange="validarDataProximaDose(this.value)" readonly>
                 <button type="submit" id="vacinar_paciente" name="vacinar" class="btn btn-outline-success w-50">Vacinar</button>
             </form>
         </div>
