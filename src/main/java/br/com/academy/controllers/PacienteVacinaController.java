@@ -71,28 +71,4 @@ public class PacienteVacinaController {
             return "redirect:/erro.html";
         }
     }
-
-    /*
-    @PostMapping("/inserirAssociacao")
-    public String salvarAssociacao(@RequestParam("id_paciente_aplicar_vacina") Long idPaciente, PacienteVacina associacao) {
-
-        Paciente paciente = pacienteRepository.findById(idPaciente).orElse(null);
-
-        Long idVacina = associacao.getVacina().getId();
-        Vacina vacina = vacinaRepository.findById(idVacina).orElse(null);
-
-        if (paciente != null) {
-            associacao.setPaciente(paciente);
-            pacienteVacinaRepository.save(associacao);
-            if (vacina != null) {
-                int quantidade = vacina.getQtd();
-                vacina.setQtd(quantidade - 1);
-                vacinaRepository.save(vacina);
-            }
-            return "redirect:/listaPacientes.html";
-        } else {
-            return "redirect:/erro.html";
-        }
-    }
-*/
 }

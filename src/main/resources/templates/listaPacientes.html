@@ -121,7 +121,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>CPF</th>
-                        <th colspan="4">Ações</th>
+                        <th colspan="3">Ações</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -131,9 +131,6 @@
                             <td>
                                 <a th:onclick="|exibirModalAplicarVacina('${pacientes.id}')|" class="btn btn-outline-success btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Aplicar vacina">
                                     <i class='bx bx-injection'></i>
-                                </a>
-                                <a th:href="@{gerarRelatorio/{id}(id=${paciente.id})}" class="btn btn-outline-primary btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Gerar relatório">
-                                    <i class='bx bxs-report'></i>
                                 </a>
                                <a th:onclick="|exibirModalEdicao('${pacientes.id}')|"  class="btn btn-outline-info btn-lg text-dark" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar">
                                    <i class="bx bx-edit"></i>
