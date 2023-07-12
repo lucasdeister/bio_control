@@ -7,10 +7,13 @@ import br.com.academy.repository.PacienteRepository;
 import br.com.academy.repository.PacienteVacinaRepository;
 import br.com.academy.repository.VacinaRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class PacienteVacinaController {
@@ -30,6 +33,15 @@ public class PacienteVacinaController {
         PacienteVacina pacienteVacina = pacienteVacinaRepository.findByPacienteIdAndVacinaId(idPaciente, idVacina);
         return pacienteVacina;
     }
+
+
+    @GetMapping("/listaPacientesVacinados.html")
+    public String exibirPaginaPacientesVacinados(Model model) {
+        List<PacienteVacina> pacientesVacinados = pacienteVacinaRepository.findAll();
+        model.addAttribute("pacientesVList", pacientesVacinados);
+        return "listaPacientesVacinados";
+    }
+
 
     @GetMapping("/buscarDadosVacina")
     @ResponseBody

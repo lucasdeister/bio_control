@@ -1,0 +1,65 @@
+a:hover{
+    cursor: pointer;
+}
+
+.tela_pacientes_vacinados{
+    background-color: white;
+    padding: 50px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.grid-container main{
+    text-align: center;
+}
+
+hr{
+    border: solid lightgray 2px;
+    background-color: lightgray;
+    margin: 15px 0 1em;
+}
+
+th {
+    width: 250px;
+}
+
+th, td{
+    font-size: 16px;
+}
+
+.container_principal{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+
+#btnSair{
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.campo_pesquisa{
+    position: relative;
+    top: 0;
+    left: 75%;
+}
+
+.container_form{
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.btnImprimir{
+    position: relative;
+    top: 0;
+    left: -45%;
+}
+
+.btnImprimir i{
+    font-size: 20px;
+}
