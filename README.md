@@ -14,7 +14,7 @@ Fluxo básico para a utilização da aplicação
 5 - Aplicar vacinas em pacientes
 6 - Gerar relatório de pacientes vacinados
 
-Obs: Pode ser visto o video dentro da pasta resources/static/apresentacao para exemplo de uso.
+Obs: Pode ser visto o video dentro desta pasta para exemplo de uso.
 
 Desenvolvido por: Lucas de Azevedo Deister
 Instagram: https://www.instagram.com/lucasdeister7/
